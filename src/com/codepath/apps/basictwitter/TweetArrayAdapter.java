@@ -6,26 +6,29 @@ import java.util.List;
 import java.util.Locale;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.codepath.apps.basictwitter.fragments.TweetListFragment;
 import com.codepath.apps.basictwitter.models.Tweet;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class TweetArrayAdapter extends ArrayAdapter<Tweet> {
-
+	
 	public TweetArrayAdapter(Context context, List<Tweet> tweets) {
 		super(context, 0, tweets);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(int position, View convertView, final ViewGroup parent) {
 		Tweet tweet = getItem(position);
 		
 		View v;
@@ -48,6 +51,19 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet> {
 		tvUserScreenName.setText(tweet.getUser().getScreenName());
 		tvBody.setText(tweet.getBody());
 		tvCreatedAt.setText(getRelativeTimeAgo(tweet.getCreatedAt()));
+		
+		ivImageProfile.setTag(tweet.getUser().getScreenName());
+		ivImageProfile.setOnClickListener(new OnClickListener() {
+			
+			@Override
+ 			public void onClick(View v) {
+				Log.d("debug", "onClick(): parent = " + parent.toString());
+				Intent i = new Intent(getContext(), ProfileActivity.class);
+				i.putExtra("userScreenName", v.getTag().toString());
+				Log.d("debug", "onClick(): userName = " + v.getTag().toString());
+				getContext().startActivity(i);				
+			}
+		});
 		return v;
 	}
 	
@@ -70,7 +86,4 @@ public class TweetArrayAdapter extends ArrayAdapter<Tweet> {
 	 
 		return relativeDate;
 	}
-	
-	
-
 }

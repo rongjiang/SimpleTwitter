@@ -39,13 +39,49 @@ public class TwitterClient extends OAuthBaseClient {
     	client.get(apiUrl, params,  handler);
     }
     
+    public void getMentionsTimeline(AsyncHttpResponseHandler handler) {
+    	String apiUrl = getApiUrl("statuses/mentions_timeline.json");
+    	// RequestParams params = new RequestParams();
+    	// params.put("max_id",  "1");
+    	client.get(apiUrl, null,  handler);
+    }
+
+    public void getUserTimeline(String screenName, AsyncHttpResponseHandler handler) {
+    	String apiUrl = getApiUrl("statuses/user_timeline.json");
+    	RequestParams params = null;
+    	if (screenName != null) {
+    		params = new RequestParams();
+        	params.put("screen_name",  screenName);    		
+    	}
+    	client.get(apiUrl, params,  handler);
+    }
+    
+    public void getUserTimeline(AsyncHttpResponseHandler handler) {
+    	getUserTimeline(null, handler);
+    }
+    
     public void postTweet(String tweet, AsyncHttpResponseHandler handler) {
     	String apiUrl = getApiUrl("statuses/update.json");
     	RequestParams params = new RequestParams();
     	params.put("status", tweet);
     	client.post(apiUrl,  params,  handler);;
     }
-    
+
+    public void getMyInfo(AsyncHttpResponseHandler handler) {
+    	String apiUrl = getApiUrl("account/verify_credentials.json");
+    	client.get(apiUrl, null,  handler);
+    }
+
+    public void getOthersInfo(String screenName, AsyncHttpResponseHandler handler) {
+    	String apiUrl = getApiUrl("users/show.json");
+    	RequestParams params = null;
+    	if (screenName != null) {
+    		params = new RequestParams();
+    		params.put("screen_name",  screenName);
+    	}    	
+    	client.get(apiUrl, params,  handler);
+    }
+
     // CHANGE THIS
     // DEFINE METHODS for different API endpoints here
     /* public void getInterestingnessList(AsyncHttpResponseHandler handler) {
